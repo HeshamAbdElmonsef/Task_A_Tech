@@ -20,7 +20,7 @@ public class IpController : ControllerBase
             ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
         }
 
-        var result = await _ipService.LookupIp(ipAddress);
+        var result = await _ipService.GetCountryCodeByIP(ipAddress);
         return Ok(result);
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using Newtonsoft.Json.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Task_A_Tech.Models;
 
@@ -15,12 +16,11 @@ public class IpService
         _logRepository = logRepository;
     }
 
-    public async Task<string> LookupIp(string ipAddress)
+    public async Task<string> GetCountryCodeByIP(string ipAddress)
     {
-        string accessKey = "YOUR_ACCESS_KEY"; // Replace with your actual key
-        var response = await _httpClient.GetAsync($"https://api.ipapi.com/api/{ipAddress}?access_key={accessKey}");
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsStringAsync();
+        var response = await _httpClient.GetStringAsync($"https://ipinfo.io/{ipAddress}/json");
+        var json = JObject.Parse(response);
+        return json["country"]?.ToString();
     }
 
     public async Task<bool> CheckIfIpIsBlocked(string ipAddress, string userAgent)
